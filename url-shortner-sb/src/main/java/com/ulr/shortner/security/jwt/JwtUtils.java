@@ -16,6 +16,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.stereotype.Component;
 
 //What is the use of this class?
 /*
@@ -25,6 +26,7 @@ import jakarta.servlet.http.HttpServletRequest;
  *    and parsing JWTs to ensure secure communication between clients and servers.
  */
 
+@Component
 public class JwtUtils {
 
     @Value("${jwt.secret}")

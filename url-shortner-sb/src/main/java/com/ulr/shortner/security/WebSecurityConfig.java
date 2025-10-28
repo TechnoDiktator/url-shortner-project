@@ -41,7 +41,7 @@ public class WebSecurityConfig {
         return authProvider;
     }
 
-
+    @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         //adding custom security rules
