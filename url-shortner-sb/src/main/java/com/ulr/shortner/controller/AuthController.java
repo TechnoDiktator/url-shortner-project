@@ -1,6 +1,7 @@
 package com.ulr.shortner.controller;
 
 
+import com.ulr.shortner.dtos.RegisterRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
