@@ -47,17 +47,25 @@ public class JwtUtils {
 
     }
 
+    // FIXED: Remove dummy implementation
     public String getUserNameFromJwtToken(String token){
-        //Dummy implementation
-        return "dummyUser";
+        return Jwts.parser()
+            .verifyWith((SecretKey)key())
+            .build()
+            .parseSignedClaims(token)
+            .getPayload()
+            .getSubject();
     }
+
 
     public String generateToken(UserDetailsImpl UserDetails){
         String username = UserDetails.getUsername();
         String roles = UserDetails.getAuthorities().stream()
                 .map(authority -> authority.getAuthority())
                 .collect(Collectors.joining(","));
-        return Jwts.builder().subject(username)
+
+                
+                return Jwts.builder().subject(username)
                 .claim("roles", roles)
                 .issuedAt(new Date()).expiration(new Date((new Date().getTime() + 86400000))).signWith(key())
                 .compact(); //1 day
