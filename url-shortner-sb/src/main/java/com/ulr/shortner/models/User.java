@@ -2,6 +2,8 @@ package com.ulr.shortner.models;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 
 @Entity

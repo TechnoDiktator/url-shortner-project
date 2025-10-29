@@ -24,14 +24,23 @@ public class AuthController {
 
     @PostMapping("/public/register")
     public ResponseEntity<?> registerUser(@RequestBody RegisterRequest registerRequest) {
-
-        User user  =  new User();
-        user.setUsername(registerRequest.getUsername());
-        user.setPassword(registerRequest.getPassword());
-        user.setRole("ROLE_USER");
-        userService.registerUser(user);
-
-        return ResponseEntity.ok("User registered successfully");
-
+        try {
+            User user = new User();
+            user.setUsername(registerRequest.getUsername());
+            user.setPassword(registerRequest.getPassword());
+            user.setRole("ROLE_USER");
+            user.setEmail(registerRequest.getEmail());
+            
+            userService.registerUser(user);
+            
+            return ResponseEntity.ok("User registered successfully");
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
+
+    
 }
+
+
+
