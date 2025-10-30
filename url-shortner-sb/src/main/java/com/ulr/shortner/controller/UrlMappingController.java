@@ -1,7 +1,8 @@
 package com.ulr.shortner.controller;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.ulr.shortner.dtos.ClickEventDto;
+import com.ulr.shortner.models.ClickEvent;
+import org.springframework.web.bind.annotation.*;
 
 import com.ulr.shortner.dtos.UrlMappingDto;
 import com.ulr.shortner.models.User;
@@ -10,14 +11,14 @@ import com.ulr.shortner.service.UserService;
 import lombok.AllArgsConstructor;
 
 import java.security.Principal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 
 @RestController
@@ -55,7 +56,46 @@ public class UrlMappingController {
     }
 
 
+    @GetMapping("/analytics/{shortUrl}")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<List<ClickEventDto>> getUrlAnalytics(@PathVariable String shorturl,
+            @RequestParam("startDate") String startDate
+            , @RequestParam("endDate") String endDate){
+
+        DateTimeFormatter formatter  = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
+        //2025-12-01T00:00:00
+
+        LocalDateTime start =  LocalDateTime.parse(startDate , formatter);
+        LocalDateTime end   =  LocalDateTime.parse(endDate , formatter);
+
+        List<ClickEventDto> clickEventDtos = urlMappingService.getClickEventsByDate(shorturl , start , end);
+        return ResponseEntity.ok(clickEventDtos);
+    }
 
     
 
+    @GetMapping("/totalClicks")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<Map<LocalDate , Long>> getTotalClicksByDate(Principal principal,
+            @RequestParam("startDate") String startDate
+            , @RequestParam("endDate") String endDate){
+
+        DateTimeFormatter formatter  = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
+        //2025-12-01T00:00:00
+
+        LocalDateTime start =  LocalDateTime.parse(startDate , formatter);
+        LocalDateTime end   =  LocalDateTime.parse(endDate , formatter);
+
+        User user = userService.findByUsername(principal.getName());
+
+        Map<LocalDate , Long> totalClicks = urlMappingService.getTotalClicksByUserAndDate(user , start , end);
+        return ResponseEntity.ok(totalClicks);  
+
+    }
+
+
+
 }
+
+
+
