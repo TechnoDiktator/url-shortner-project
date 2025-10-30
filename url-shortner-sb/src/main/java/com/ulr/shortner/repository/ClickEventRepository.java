@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface ClickEventRepository extends JpaRepository<ClickEvent , Long> {
     List<ClickEvent> findByUrlMappingAndClickDateBetween(UrlMapping mapping , LocalDateTime startDate , LocalDateTime endDate);
-    List<ClickEvent> findByUrlMappingInClickDateBetween(List<UrlMapping> urlmappings , LocalDateTime startDate , LocalDateTime endDate);
+    List<ClickEvent> findByUrlMappingInAndClickDateBetween(List<UrlMapping> urlmappings , LocalDateTime startDate , LocalDateTime endDate);
 }
 
 

@@ -55,10 +55,17 @@ public class UrlMappingController {
 
     }
 
+    /*
+     * 
+     *   curl -X GET "http://localhost:8081/api/url/analytics/abc12345?startDate=2025-10-01T00:00:00&endDate=2025-10-30T23:59:59" \
+  -H "Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJqb2huIGRvZSIsInJvbGVzIjoiUk9MRV9VU0VSIiwiaWF0IjoxNzYxNzYzMDg1LCJleHAiOjE3NjE4NDk0ODV9.r6ibCz51lL0Sxk_wg-KBqjqqo5Bl_GCc9dwuZj-g45M9-A2VeCXNtlU7HoE9JzMv"
+     * 
+     */
+
 
     @GetMapping("/analytics/{shortUrl}")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<List<ClickEventDto>> getUrlAnalytics(@PathVariable String shorturl,
+    public ResponseEntity<List<ClickEventDto>> getUrlAnalytics(@PathVariable String shortUrl,
             @RequestParam("startDate") String startDate
             , @RequestParam("endDate") String endDate){
 
@@ -68,7 +75,7 @@ public class UrlMappingController {
         LocalDateTime start =  LocalDateTime.parse(startDate , formatter);
         LocalDateTime end   =  LocalDateTime.parse(endDate , formatter);
 
-        List<ClickEventDto> clickEventDtos = urlMappingService.getClickEventsByDate(shorturl , start , end);
+        List<ClickEventDto> clickEventDtos = urlMappingService.getClickEventsByDate(shortUrl , start , end);
         return ResponseEntity.ok(clickEventDtos);
     }
 
@@ -80,11 +87,11 @@ public class UrlMappingController {
             @RequestParam("startDate") String startDate
             , @RequestParam("endDate") String endDate){
 
-        DateTimeFormatter formatter  = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
+        DateTimeFormatter formatter  = DateTimeFormatter.ISO_LOCAL_DATE;
         //2025-12-01T00:00:00
 
-        LocalDateTime start =  LocalDateTime.parse(startDate , formatter);
-        LocalDateTime end   =  LocalDateTime.parse(endDate , formatter);
+        LocalDate start =  LocalDate.parse(startDate , formatter);
+        LocalDate end   =  LocalDate.parse(endDate , formatter);
 
         User user = userService.findByUsername(principal.getName());
 
